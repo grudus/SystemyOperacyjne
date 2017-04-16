@@ -2,7 +2,6 @@ package lab2;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static java.lang.Math.abs;
 import static java.util.Comparator.comparingInt;
