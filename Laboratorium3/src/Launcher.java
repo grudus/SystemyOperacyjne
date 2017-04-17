@@ -22,13 +22,13 @@ public class Launcher {
 
         Stream.of(
                 new FifoAlgorithm(FRAMES),
-                new LeastRecentlyUsedAlgorithm(FRAMES),
                 new OptimalAlgorithm(FRAMES),
-                new RandomAlgorithm(FRAMES),
-                new SecondChanceAlgorithm(FRAMES))
+                new LeastRecentlyUsedAlgorithm(FRAMES),
+                new SecondChanceAlgorithm(FRAMES),
+                new RandomAlgorithm(FRAMES))
                 .forEach(alg -> {
                     final int pages = alg.process(new LinkedList<>(requestList));
-                    System.out.println(format("%s uses %d create replacements", alg, pages));
+                    System.out.println(format("%s create %d replacements", alg, pages));
                 });
     }
 }

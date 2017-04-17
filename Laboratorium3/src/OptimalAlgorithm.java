@@ -4,37 +4,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.lang.System.nanoTime;
-
-public class OptimalAlgorithm extends Algorithm<PageRequest> {
-
-    private List<Page> pages;
+public class OptimalAlgorithm extends Algorithm<List<Page>> {
 
     public OptimalAlgorithm(int frames) {
         super(frames);
         pages = new ArrayList<>(frames);
+        removeFunction = (request, requests) -> removeLast(requests);
     }
 
-    @Override
-    protected int calculate(Queue<PageRequest> items) {
-        int pagesOut = 0;
-
-        while (!items.isEmpty()) {
-            PageRequest request = items.poll();
-            if (emptyFramesExists()) {
-                addPage(request);
-                pagesOut++;
-            }
-            else {
-                if (!requestAlreadyInFrame(request)) {
-                    removeLast(items);
-                    addPage(request);
-                    ++pagesOut;
-                }
-            }
-        }
-
-        return pagesOut;    }
 
     private void removeLast(Queue<PageRequest> requests) {
         List<Integer> pagesIds = pages.stream().map(page -> page.id).collect(Collectors.toList());
@@ -57,22 +34,18 @@ public class OptimalAlgorithm extends Algorithm<PageRequest> {
                 .collect(Collectors.toList());
     }
 
-    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor)
-    {
+    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
         Map<Object, Boolean> map = new ConcurrentHashMap<>();
         return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
-    private boolean requestAlreadyInFrame(PageRequest request) {
+    @Override
+    protected boolean requestAlreadyInFrame(PageRequest request) {
         return pages.stream().anyMatch(page -> page.id == request.pageId);
     }
 
-    private void addPage(PageRequest request) {
+    @Override
+    protected void addPage(PageRequest request) {
         pages.add(new Page(request.pageId));
     }
-
-    private boolean emptyFramesExists() {
-        return pages.size() < frames;
-    }
-
 }

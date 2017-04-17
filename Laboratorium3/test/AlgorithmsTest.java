@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -60,12 +59,12 @@ public class AlgorithmsTest {
         assertCalculation(6, new OptimalAlgorithm(4));
     }
 
-    private void assertCalculation(int pagesOut, Algorithm<PageRequest> algorithm, Queue<PageRequest> requests) {
+    private void assertCalculation(int pagesOut, Algorithm<?> algorithm, Queue<PageRequest> requests) {
         assertEquals(pagesOut, algorithm.process(requests));
     }
 
 
-    private void assertCalculation(int pagesOut, Algorithm<PageRequest> algorithm) {
+    private void assertCalculation(int pagesOut, Algorithm<?> algorithm) {
         assertCalculation(pagesOut, algorithm, this.requests);
     }
 

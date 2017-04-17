@@ -1,8 +1,6 @@
 import java.util.*;
 
-public class FifoAlgorithm extends Algorithm<PageRequest> {
-
-    private Queue<Page> pages;
+public class FifoAlgorithm extends Algorithm<Queue<Page>> {
 
     public FifoAlgorithm(int frames) {
         super(frames);
@@ -11,32 +9,16 @@ public class FifoAlgorithm extends Algorithm<PageRequest> {
 
 
     @Override
-    public int calculate(Queue<PageRequest> requests) {
-        int pagesOut = 0;
-
-        while (!requests.isEmpty()) {
-            PageRequest request = requests.poll();
-            if (emptyFramesExists()) {
-                pages.add(new Page(request.pageId));
-                ++pagesOut;
-            }
-            else {
-                if (!requestAlreadyInFrame(request)) {
-                    pages.poll();
-                    pages.add(new Page(request.pageId));
-                    ++pagesOut;
-                }
-            }
-        }
-
-        return pagesOut;
+    protected void removePage(PageRequest request) {
+        pages.poll();
     }
 
-    private boolean requestAlreadyInFrame(PageRequest request) {
+    @Override
+    protected boolean requestAlreadyInFrame(PageRequest request) {
         return pages.stream().anyMatch(page -> page.id == request.pageId);
     }
 
-    private boolean emptyFramesExists() {
-        return pages.size() < frames;
+    protected void addPage(PageRequest request) {
+        pages.add(new Page(request.pageId));
     }
 }

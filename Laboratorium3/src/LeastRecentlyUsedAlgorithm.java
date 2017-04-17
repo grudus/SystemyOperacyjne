@@ -2,57 +2,32 @@ import java.util.*;
 
 import static java.lang.System.nanoTime;
 
-public class LeastRecentlyUsedAlgorithm extends Algorithm<PageRequest> {
-    List<AbstractMap.SimpleEntry<Page, Long>> pagesWithTimestamp;
+public class LeastRecentlyUsedAlgorithm extends Algorithm<List<AbstractMap.SimpleEntry<Page, Long>> > {
 
     public LeastRecentlyUsedAlgorithm(int frames) {
         super(frames);
-        pagesWithTimestamp = new ArrayList<>(frames);
+        pages = new ArrayList<>(frames);
     }
 
     @Override
-    public int calculate(Queue<PageRequest> items) {
-        int pagesOut = 0;
-
-        while (!items.isEmpty()) {
-            PageRequest request = items.poll();
-            if (emptyFramesExists()) {
-                addPage(request);
-                pagesOut++;
-            }
-            else {
-                if (!requestAlreadyInFrame(request)) {
-                    removeLastUsed();
-                    addPage(request);
-                    ++pagesOut;
-                }
-                else
-                    updatePage(request);
-            }
-        }
-
-        return pagesOut;
-    }
-
-    private void updatePage(PageRequest request) {
-        pagesWithTimestamp.stream().filter(entry -> entry.getKey().id == request.pageId)
+    protected void cleanPages(PageRequest request) {
+        pages.stream().filter(entry -> entry.getKey().id == request.pageId)
                 .forEach(entry -> entry.setValue(nanoTime()));
     }
 
-    private void removeLastUsed() {
-        pagesWithTimestamp.sort(Comparator.comparingLong(AbstractMap.SimpleEntry::getValue));
-        pagesWithTimestamp.remove(0);
+    @Override
+    protected void removePage(PageRequest request) {
+        pages.sort(Comparator.comparingLong(AbstractMap.SimpleEntry::getValue));
+        pages.remove(0);
     }
 
-    private boolean requestAlreadyInFrame(PageRequest request) {
-        return pagesWithTimestamp.stream().anyMatch(page -> page.getKey().id == request.pageId);
+    @Override
+    protected boolean requestAlreadyInFrame(PageRequest request) {
+        return pages.stream().anyMatch(page -> page.getKey().id == request.pageId);
     }
 
-    private void addPage(PageRequest request) {
-        pagesWithTimestamp.add(new AbstractMap.SimpleEntry<>(new Page(request.pageId), nanoTime()));
-    }
-
-    private boolean emptyFramesExists() {
-        return pagesWithTimestamp.size() < frames;
+    @Override
+    protected void addPage(PageRequest request) {
+        pages.add(new AbstractMap.SimpleEntry<>(new Page(request.pageId), nanoTime()));
     }
 }

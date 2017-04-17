@@ -1,63 +1,37 @@
 import java.util.*;
 
-public class SecondChanceAlgorithm extends Algorithm<PageRequest> {
-
-    private Queue<AbstractMap.SimpleEntry<Page, Boolean>> pagesUsed;
+public class SecondChanceAlgorithm extends Algorithm<Queue<AbstractMap.SimpleEntry<Page, Boolean>>> {
+    
 
     protected SecondChanceAlgorithm(int frames) {
         super(frames);
-        pagesUsed = new LinkedList<>();
+        pages = new LinkedList<>();
     }
 
     @Override
-    protected int calculate(Queue<PageRequest> items) {
-        int pagesOut = 0;
-
-        while (!items.isEmpty()) {
-            PageRequest request = items.poll();
-            if (emptyFramesExists()) {
-                addPage(request);
-                pagesOut++;
-            }
-            else {
-                if (!requestAlreadyInFrame(request)) {
-                    removePageWithoutChance();
-                    addPage(request);
-                    ++pagesOut;
-                }
-                else
-                    markAsNotUsed(request);
-            }
-        }
-
-        return pagesOut;
-    }
-
-    private void markAsNotUsed(PageRequest request) {
-        pagesUsed.stream().filter(entry -> entry.getKey().id == request.pageId)
+    protected void cleanPages(PageRequest request) {
+        pages.stream().filter(entry -> entry.getKey().id == request.pageId)
                 .forEach(entry -> entry.setValue(false));
     }
 
-    private void addPage(PageRequest request) {
-        pagesUsed.add(new AbstractMap.SimpleEntry<>(new Page(request.pageId), false));
+    @Override
+    protected void addPage(PageRequest request) {
+        pages.add(new AbstractMap.SimpleEntry<>(new Page(request.pageId), false));
     }
 
-    private void removePageWithoutChance() {
+    @Override
+    protected void removePage(PageRequest request) {
         while (true) {
-            AbstractMap.SimpleEntry<Page, Boolean> entry = pagesUsed.poll();
+            AbstractMap.SimpleEntry<Page, Boolean> entry = pages.poll();
             if (!entry.getValue())
-                pagesUsed.add(new AbstractMap.SimpleEntry<>(entry.getKey(), true));
+                pages.add(new AbstractMap.SimpleEntry<>(entry.getKey(), true));
             else
                 break;
         }
     }
 
-
-    private boolean requestAlreadyInFrame(PageRequest request) {
-        return pagesUsed.stream().anyMatch(entry -> entry.getKey().id == request.pageId);
-    }
-
-    private boolean emptyFramesExists() {
-        return pagesUsed.size() < frames;
+    @Override
+    protected boolean requestAlreadyInFrame(PageRequest request) {
+        return pages.stream().anyMatch(entry -> entry.getKey().id == request.pageId);
     }
 }
