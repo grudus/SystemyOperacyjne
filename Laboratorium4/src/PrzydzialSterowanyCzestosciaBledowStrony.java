@@ -9,7 +9,8 @@ public class PrzydzialSterowanyCzestosciaBledowStrony extends PrzydzialRamek {
     @Override
     public int wykonaj() {
         int ramekNaProces = iloscRamek / procesy.length;
-        for (int i = 0; i < procesy.length; ++i) procesy[i].setIleRamek(ramekNaProces);
+        for (AlgorytmLRU aProcesy : procesy)
+            aProcesy.setIleRamek(ramekNaProces);
         boolean czyWykonanoWszystkie = false;
         int licznik = 0;
         int[] tablicaBledowStron = new int[procesy.length];
@@ -18,8 +19,8 @@ public class PrzydzialSterowanyCzestosciaBledowStrony extends PrzydzialRamek {
         while (!czyWykonanoWszystkie) {
             licznik++;
             czyWykonanoWszystkie = true;
-            for (int i = 0; i < procesy.length; ++i) {
-                if (!procesy[i].wykonajJeden()) czyWykonanoWszystkie = false;
+            for (AlgorytmLRU aProcesy : procesy) {
+                if (!aProcesy.wykonajJeden()) czyWykonanoWszystkie = false;
             }
             if (licznik >= ramekNaProces) {
                 for (int i = 0; i < procesy.length; ++i) {

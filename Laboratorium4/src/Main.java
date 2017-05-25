@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class Main {
     public static final int ILOSC_PROCESOW = 10;
-    public static final int ILOSC_STRON = 1000;
+    public static final int ILOSC_STRON = 10000;
     public static final int MINIMUM_ODWOLAN = 30;
     public static final int MAXIMUM_ODWOLAN = 300;
     public static final int PROMIEN_LOKALNOSCI = 10;

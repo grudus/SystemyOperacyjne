@@ -8,15 +8,15 @@ public class PrzydzialProporcjonalny extends PrzydzialRamek {
     @Override
     public int wykonaj() {
         int lacznaDlugoscProcesow = 0;
-        for (int i = 0; i < procesy.length; ++i)
-            lacznaDlugoscProcesow += procesy[i].getTablicaOdwolanDoStron().length;
-        for (int i = 0; i < procesy.length; ++i) {
-            int ramekNaProces = iloscRamek * procesy[i].getTablicaOdwolanDoStron().length / lacznaDlugoscProcesow;
-            procesy[i].setIleRamek(ramekNaProces);
+        for (AlgorytmLRU aProcesy : procesy)
+            lacznaDlugoscProcesow += aProcesy.getTablicaOdwolanDoStron().length;
+        for (AlgorytmLRU aProcesy : procesy) {
+            int ramekNaProces = iloscRamek * aProcesy.getTablicaOdwolanDoStron().length / lacznaDlugoscProcesow;
+            aProcesy.setIleRamek(ramekNaProces);
         }
-        for (int i = 0; i < procesy.length; ++i) {
-            procesy[i].wykonajWszystkie();
-            licznikBledowStron += procesy[i].getLicznikBledowStron();
+        for (AlgorytmLRU aProcesy : procesy) {
+            aProcesy.wykonajWszystkie();
+            licznikBledowStron += aProcesy.getLicznikBledowStron();
         }
         return licznikBledowStron;
     }
