@@ -1,3 +1,5 @@
+package process;
+
 import static java.lang.String.format;
 
 public class Process {
@@ -5,7 +7,7 @@ public class Process {
     private final double processorLoading;
     private int timeToFinish;
 
-    public Process(double processorLoading, int timeToFinish) {
+    Process(double processorLoading, int timeToFinish) {
         this.processorLoading = processorLoading;
         this.timeToFinish = timeToFinish;
     }

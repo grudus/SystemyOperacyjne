@@ -1,12 +1,17 @@
+package processor.allocation;
+
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Queue;
+import process.Process;
+import processor.Processor;
+import processor.ProcessorAllocationStats;
 
 public class ProcessorAllocationMager_1 extends ProcessorAllocationManager {
 
     private final SecureRandom random;
     private final int maxNumberOfRequests;
-    public static final String DESCRIPTION = "x pyta losowo wybr. procesor y o aktualne obciążenie. Jeśli jest mniejsze od progu p, proces jest tam wysyłany." +
+    private static final String DESCRIPTION = "x pyta losowo wybr. procesor y o aktualne obciążenie. Jeśli jest mniejsze od progu p, proces jest tam wysyłany." +
             "\nJeśli nie, losujemy i pytamy następny, próbując co najwyżej z razy. Jeśli wszystkie wylosowane są obciążone powyżej p, proces wykonuje się na x";
 
     public ProcessorAllocationMager_1(List<Processor> processors, Queue<Process> processes, int maxNumberOfRequests) {

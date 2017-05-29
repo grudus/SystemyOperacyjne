@@ -1,5 +1,10 @@
+package processor.allocation;
+
 import java.util.List;
 import java.util.Queue;
+import process.Process;
+import processor.Processor;
+import processor.ProcessorAllocationStats;
 
 import static java.util.Collections.unmodifiableList;
 
