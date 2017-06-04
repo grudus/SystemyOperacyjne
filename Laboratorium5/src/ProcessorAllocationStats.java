@@ -1,5 +1,3 @@
-package processor;
-
 import static java.lang.String.format;
 
 public class ProcessorAllocationStats {
