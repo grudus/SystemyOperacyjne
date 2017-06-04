@@ -2,10 +2,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.LongStream.range;
 
 public class Lab5 {
@@ -34,7 +33,8 @@ public class Lab5 {
         ).generate(NUMBER_OF_PROCESSES);
 
         ProcessorAllocationManager[] managers = new ProcessorAllocationManager[] {
-                new ProcessorAllocationManager_1(processors, MAX_MIGRATION_REQUESTS)
+                new ProcessorAllocationManager_1(processors, MAX_MIGRATION_REQUESTS),
+                new ProcessorAllocationManager_2(processors)
         };
 
         for (ProcessorAllocationManager manager : managers)
