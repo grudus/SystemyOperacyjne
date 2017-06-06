@@ -72,4 +72,10 @@ public class Processor {
     public boolean isBelowMinimumLoad() {
         return currentLoad <= minLoad;
     }
+
+    public Process removeProcess() {
+        return processes.size() > 0
+                ? processes.remove(0)
+                : Process.EMPTY;
+    }
 }

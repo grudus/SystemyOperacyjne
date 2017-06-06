@@ -19,36 +19,60 @@ public class ProcessorAllocationManager_2 extends ProcessorAllocationManager {
             Process process = processes.poll();
             Processor processor = randomProcessor();
 
-            if (process.isEmpty()) {
-                processAll();
-            }
-            else if (processor.canHandleNextProcess()) {
-                processor.addProcess(process);
-            }
-            else {
-                List<Processor> processorsToPeek = new ArrayList<>(processors);
-                boolean processHandled = false;
-                while (!processorsToPeek.isEmpty() && !processHandled) {
-                    int index = random.nextInt(processorsToPeek.size());
-                    Processor newProcessor = processorsToPeek.get(index);
-                    ++migrationRequest;
-
-                    if (newProcessor.canHandleNextProcess()) {
-                        ++migrations;
-                        newProcessor.addProcess(process);
-                        processHandled = true;
-                    }
-                    else
-                        processorsToPeek.remove(index);
-                }
-                if (processorsToPeek.isEmpty() && !processHandled)
-                    System.err.println("Cannot handle process " + process);
-            }
+            ProcessResponse response = findProcessorAndProcess(process, processor);
+            migrationRequest += response.migrationRequests;
+            migrations += response.migrations;
 
             processAll();
         }
 
         return new ProcessorAllocationStats(DESCRIPTION, averageLoad(), averageDeviation(), migrationRequest, migrations);
+    }
+
+    protected ProcessResponse findProcessorAndProcess(Process process, Processor processor) {
+        int migrationRequest = 0;
+        int migrations = 0;
+        Processor selectedProcessor = processor;
+
+        if (process.isEmpty()) {
+            processAll();
+        }
+        else if (processor.canHandleNextProcess()) {
+            processor.addProcess(process);
+        }
+        else {
+            List<Processor> processorsToPeek = new ArrayList<>(processors);
+            boolean processHandled = false;
+            while (!processorsToPeek.isEmpty() && !processHandled) {
+                int index = random.nextInt(processorsToPeek.size());
+                Processor newProcessor = processorsToPeek.get(index);
+                ++migrationRequest;
+
+                if (newProcessor.canHandleNextProcess()) {
+                    ++migrations;
+                    selectedProcessor = newProcessor;
+                    newProcessor.addProcess(process);
+                    processHandled = true;
+                }
+                else
+                    processorsToPeek.remove(index);
+            }
+            if (processorsToPeek.isEmpty() && !processHandled) ;
+//                System.err.println("Cannot handle process " + process);
+        }
+        return new ProcessResponse(migrationRequest, migrations, selectedProcessor);
+    }
+
+    protected static class ProcessResponse {
+        protected final int migrationRequests;
+        protected final int migrations;
+        protected final Processor processor;
+
+        public ProcessResponse(int migrationRequests, int migrations, Processor processor) {
+            this.migrationRequests = migrationRequests;
+            this.migrations = migrations;
+            this.processor = processor;
+        }
     }
 
 }
