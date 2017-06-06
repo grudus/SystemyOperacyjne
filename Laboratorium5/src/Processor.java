@@ -1,8 +1,10 @@
 import java.util.*;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 public class Processor {
+    private final double minLoad;
     private final double maxLoad;
     private List<Process> processes;
 
@@ -10,10 +12,15 @@ public class Processor {
     private int time;
     private Map<Integer, Double> loadInTime;
 
-    public Processor(double maxLoad) {
+    public Processor(double minLoad, double maxLoad) {
+        this.minLoad = minLoad;
         this.maxLoad = maxLoad;
         this.processes = new ArrayList<>();
         this.loadInTime = new HashMap<>();
+    }
+
+    public Processor(Processor processor) {
+        this(processor.minLoad, processor.maxLoad);
     }
 
     public void addProcess(Process process) {
@@ -60,5 +67,9 @@ public class Processor {
     @Override
     public String toString() {
         return loadInTime.toString();
+    }
+
+    public boolean isBelowMinimumLoad() {
+        return currentLoad <= minLoad;
     }
 }

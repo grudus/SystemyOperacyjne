@@ -29,4 +29,8 @@ public abstract class ProcessorAllocationManager {
     protected void processAll() {
         processors.forEach(Processor::process);
     }
+
+    protected Processor randomProcessor() {
+        return processors.get(random.nextInt(processors.size()));
+    }
 }

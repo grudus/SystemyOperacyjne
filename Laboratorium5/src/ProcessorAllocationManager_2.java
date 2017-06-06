@@ -51,7 +51,4 @@ public class ProcessorAllocationManager_2 extends ProcessorAllocationManager {
         return new ProcessorAllocationStats(DESCRIPTION, averageLoad(), averageDeviation(), migrationRequest, migrations);
     }
 
-    private Processor randomProcessor() {
-        return processors.get(random.nextInt(processors.size()));
-    }
 }

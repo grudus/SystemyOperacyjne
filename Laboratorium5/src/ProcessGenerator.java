@@ -17,7 +17,7 @@ public class ProcessGenerator {
         this.minTime = minTime;
         this.maxTime = maxTime;
         this.random = new Random();
-        this.emptyProcessProbability = 0.3;
+        this.emptyProcessProbability = 0.1;
     }
 
     public Process[] generate(final int N) {

@@ -10,6 +10,10 @@ public class Process {
         this.time = time;
     }
 
+    public Process(Process process) {
+        this(process.processorLoad, process.time);
+    }
+
     public int getTime() {
         return time;
     }
