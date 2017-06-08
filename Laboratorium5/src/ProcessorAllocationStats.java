@@ -17,7 +17,8 @@ public class ProcessorAllocationStats {
 
     @Override
     public String toString() {
-        return format("%s:\n1) Average load: %.2f\n2) Average deviation: %.2f\n3) Number of load requests: %d\n4) Number of load migrations: %d\n",
+        return format("%s:\n1) Srednie obciazenie: %.2f\n2) Srednie odchylenie: %.2f\n"
+                      + "3) Ilosc zapytan o obciazenie: %d\n4) Ilosc migracji: %d\n",
                 description, averageLoad, averageDeviation, loadRequests, loadMigrations);
     }
 }
